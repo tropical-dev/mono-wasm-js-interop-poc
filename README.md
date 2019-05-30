@@ -5,8 +5,9 @@ Download latest Mono WASM SDK built [from Mono CI](https://jenkins.mono-project.
 Detailed explanation at [Mono project site.](https://github.com/mono/mono/blob/master/sdks/wasm/docs/getting-started/obtain-wasm-sdk.md)
 
 ## Set WASM_SDK path to where you unziped the SDK 
-
+```bash 
 export WASM_SDK=/Users/cab/Dev/WebAssembly/mono/mono-wasm-ad03563fb46
+```
 
 ## Build command to compile DLL's
 ```bash
