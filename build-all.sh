@@ -1,0 +1,5 @@
+export WASM_SDK=/Users/cab/Dev/WebAssembly/mono/mono-wasm-ad03563fb46
+
+csc /target:library -out:sample.dll /noconfig /nostdlib /r:$WASM_SDK/wasm-bcl/wasm/mscorlib.dll /r:Newtonsoft.Json.dll  /r:$WASM_SDK/wasm-bcl/wasm/System.dll /r:$WASM_SDK/wasm-bcl/wasm/System.Core.dll /r:$WASM_SDK/wasm-bcl/wasm/Facades/netstandard.dll /r:$WASM_SDK/wasm-bcl/wasm/System.Net.Http.dll /r:$WASM_SDK/framework/WebAssembly.Bindings.dll /r:$WASM_SDK/framework/WebAssembly.Net.Http.dll  /r:$WASM_SDK/framework/WebAssembly.Net.WebSockets.dll /r:$WASM_SDK/wasm-bcl/wasm/Facades/System.Threading.dll  /r:$WASM_SDK/wasm-bcl/wasm/Facades/System.Text.Encoding.dll /r:$WASM_SDK/wasm-bcl/wasm/Facades/System.Net.WebSockets.dll /r:$WASM_SDK/framework/WebAssembly.Net.WebSockets.dll dependency.cs sample.cs wstest.cs WebGatewayMock.cs
+
+mono $WASM_SDK/packager.exe --copy=always --out=./publish --asset=./sample.html --asset=server.py sample.dll

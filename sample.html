@@ -23,13 +23,31 @@
 	  <div id="out"></div>	  
 	
 	<script type='text/javascript'>
+	function uuidv4() {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+    var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+    return v.toString(16);
+  });
+}
 		var App = {
 			onClick: function () {
 				this.output.value = "Left";
 				// var res = this.int_add (1, 2);
 				// var res = this.hello_world();
-				BINDING.call_static_method("[sample] WebGatewayMock.WebGateway:Receive", 
-				[ {Type : "SteerEvent", Payload: this.output.value} ]);
+				var msg = {
+						Type: "SteerAction", 
+						Payload: {
+							Id: uuidv4(),
+							Angle: 23.3,
+							Speed: 30,
+							Timestamp: new Date()}
+				};
+				var jsonStr = JSON.stringify(	msg);
+				BINDING.call_static_method("[sample] WebGatewayMock.WebGateway:ReceiveJson", 
+				[ 
+					// {Type : "SteerEvent", Payload: this.output.value} 
+				 jsonStr
+				]);
 				
 				// this.output.value = res;
 			},
