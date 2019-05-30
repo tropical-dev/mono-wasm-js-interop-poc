@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en-us">
+  <head>
+		<style>
+			body {
+				padding: 20px;
+				background-color:#ffffc9
+			  }
+				  
+			  p { margin : 0; }
+		</style>    	  
+  </head>
+  <body>
+	  C# output:
+	  <br>
+		 <textarea rows="10" cols="100" id="output"></textarea>
+	  <br>
+		  <button type="button" onclick="App.onClick()" id="button" disabled="true">Steer</button>
+	  <br>
+
+		<p><button onclick="App.subscribeToPosition()">Subscribe To Position </button></p>
+		<p><button onclick="App.wsConnect()">Connect WS</button></p>
+	  <div id="out"></div>	  
+	
+	<script type='text/javascript'>
+		var App = {
+			onClick: function () {
+				this.output.value = "Left";
+				// var res = this.int_add (1, 2);
+				// var res = this.hello_world();
+				BINDING.call_static_method("[sample] WebGatewayMock.WebGateway:Receive", 
+				[ {Type : "SteerEvent", Payload: this.output.value} ]);
+				
+				// this.output.value = res;
+			},
+			wsConnect : function () {
+				var address = this.output.value;
+				if(!address.startsWith("ws"))
+					address = "ws://localhost:3333";
+					BINDING.call_static_method("[sample] WebSocketProgram:Main", [address]);
+			},
+			subscribeToPosition: function () {
+				this.subscribePos(
+					{
+						onNewPosition: function(newMsg) {
+								console.log("New Pos Received "  + newMsg);
+					}
+			}, "onNewPosition");
+			},
+			init: function () {
+				this.int_add = Module.mono_bind_static_method ("[sample] Math:IntAdd");
+				this.hello_world = Module.mono_bind_static_method ("[sample] Math:HelloWorld");
+				// this.wsConnect = 
+
+				this.subscribePos = Module.mono_bind_static_method ("[sample] WebGatewayMock.WebGateway:Subscribe"); 
+				this.output = document.getElementById ("output");
+				this.button = document.getElementById ("button");
+
+				this.button.disabled = false;
+
+
+				// initialize geolocation sample
+				// BINDING.call_static_method("[sample] GeoLocation.Program:Main", []);
+				// BINDING.call_static_method("[sample] WebSocketProgram:Main", [])
+			},
+            geoFindMeCSharp: function () {
+                BINDING.call_static_method("[sample] GeoLocation.Program:GeoFindMe", [ document.getElementById("out") ]);
+            }			
+		};
+
+        // Called from C# passing in the mime type of the image and the 
+        // image data converted from byte array to base64
+        function showMyPosition (mimeType, imageData)
+        {
+            var output = document.getElementById("out");
+
+            var img = new Image();
+            img.src = "data:" + mimeType + ";base64," + imageData;
+
+            output.appendChild(img);
+
+        }
+
+      </script>
+    <script type="text/javascript" src="mono-config.js"></script>
+	<script type="text/javascript" src="runtime.js"></script>
+      <script async type="text/javascript" src="mono.js"></script>
+  </body>
+  </html>
